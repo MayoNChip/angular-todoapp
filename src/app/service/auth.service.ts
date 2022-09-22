@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom, Observable, BehaviorSubject } from 'rxjs';
 import { user } from '../auth/login-form/login';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,7 @@ export class AuthService {
   public isLoggedIn$: Observable<boolean> = this.isLoggedIn.asObservable();
   subject = new BehaviorSubject(123);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, public router: Router) {}
 
   setIsLoggedIn(user: user) {
     localStorage.setItem('loggedIn', 'true');
@@ -86,5 +87,11 @@ export class AuthService {
     });
 
     return user;
+  }
+
+  userLogout() {
+    localStorage.clear();
+    this.isLoggedIn.next(false);
+    this.router.navigate(['/']);
   }
 }

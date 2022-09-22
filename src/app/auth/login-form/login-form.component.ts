@@ -28,10 +28,8 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
   constructor(
     public fb: FormBuilder,
-    public fireStoreService: FirebaseService,
     public authService: AuthService,
     private router: Router,
-    private http: HttpClient,
     public appRef: ApplicationRef
   ) {}
 

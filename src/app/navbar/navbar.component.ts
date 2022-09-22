@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '../service/auth.service';
 import { navbarItems } from './data/navbar.items';
 
@@ -28,7 +28,6 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
-    localStorage.clear();
-    this.isLoggedIn = false;
+    this.authService.userLogout();
   }
 }

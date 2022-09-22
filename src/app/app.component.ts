@@ -7,9 +7,13 @@ import { AuthService } from './service/auth.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+  isLoggedIn: boolean;
+
   constructor(public authService: AuthService) {}
 
   ngOnInit(): void {
-    const isLoggedIn = this.authService.getIsLoggedIn();
+    const isLogged = this.authService
+      .getIsLoggedIn()
+      .subscribe((res) => (this.isLoggedIn = res));
   }
 }

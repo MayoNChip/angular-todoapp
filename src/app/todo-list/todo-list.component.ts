@@ -36,11 +36,14 @@ export class TodoListComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.todos);
     this.authService.getIsLoggedIn().subscribe((res) => {
+      this.isLoggedIn = res;
       if (res) {
-        this.isLoggedIn = res;
+        const userId = localStorage.getItem('userId');
+        this.getUserTodos(parseInt(userId!));
+      } else {
+        this.todos = []
       }
     });
-    this.getUserTodos(parseInt(this.userId));
   }
 
   handleTodoClick = (todoId: number) => {
@@ -57,13 +60,9 @@ export class TodoListComponent implements OnInit {
   }
 
   getUserTodos(userId: number) {
-    const userDetails = this.authService.getUserDetails(userId);
-    if (!userDetails) {
-      return;
-    }
-    this.todosService
-      .getTodosByUserId(userDetails.id)
-      .subscribe((res) => (this.todos = res));
+    this.todosService.getTodosByUserId(userId).subscribe((res) => {
+      this.todos = res;
+    });
   }
 
   openModal(todo: Todo) {
