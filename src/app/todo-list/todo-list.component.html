@@ -1,0 +1,44 @@
+<div class="flex flex-col items-center w-10/12 mx-auto">
+  <div class="flex items-center justify-between w-full h-24">
+    <h1 class="mt-8 text-6xl font-semibold text-gray-100">My To-do's</h1>
+    <button
+      *ngIf="isLoggedIn"
+      (click)="handleAddTodo()"
+      class="px-4 py-2 text-white bg-orange-500 rounded-full w-fit h-fit hover:bg-orange-700"
+    >
+      Add New To-do
+    </button>
+  </div>
+  <div
+    class="grid w-full h-full grid-cols-1 grid-rows-2 mt-4 md:grid-rows-4 md:grid-cols-4 gap-y-10 gap-x-10"
+  >
+    <div
+      *ngFor="let todo of todos; let i = index"
+      (click)="openModal(todo)"
+      class="relative flex flex-col w-full text-gray-800 transition-all bg-gray-200 rounded-md shadow-md cursor-pointer h-fit hover:scale-105"
+    >
+      <div class="flex flex-col justify-between w-full h-full p-4 space-y-10">
+        <h1
+          class="text-3xl font-semibold text-gray-800 underline decoration-2 decoration-orange-600/40"
+        >
+          {{ todo.title | titlecase }}
+        </h1>
+        <div
+          *ngIf="todo.completed; else notCompleted"
+          class="flex flex-col items-center self-center justify-center p-2 text-white scale-75 bg-green-600 border-4 rounded shadow-inner w-fit border-green-700/50 bottom-5"
+        >
+          <h1 class="text-base">To-do Completed!</h1>
+          <h3 class="text-sm text-green-300">Way To Go!</h3>
+        </div>
+        <ng-template #notCompleted>
+          <div
+            class="flex flex-col items-center self-center p-2 text-white scale-75 bg-orange-500 border-4 rounded-md sm:w-16 md:w-fit border-orange-600/50 h-fit bottom-5"
+          >
+            <h1 class="text-xl">To-do waiting...</h1>
+            <h3 class="text-sm text-red-300">I believe in you!</h3>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

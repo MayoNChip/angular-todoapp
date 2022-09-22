@@ -1,0 +1,70 @@
+<nav class="w-full h-[60px] bg-gray-300 flex items-center justify-between">
+  <div class="ml-5">
+    <img
+      src="../../assets/logo.png"
+      target="_blank"
+      alt="logo"
+      class="w-[50px]"
+    />
+  </div>
+
+  <div class="h-full">
+    <button
+      *ngFor="let item of navbarItems"
+      class="h-full px-4 py-2 text-black w-max hover:bg-orange-600 hover:text-white"
+      routerLink="{{ item.path }}"
+    >
+      <!-- <button class="w-20 h-full text-black hover:gray-600 hover:text-white"> -->
+      {{ item.title }}
+      <!-- </button> -->
+    </button>
+  </div>
+
+  <!-- <div class="ml-5">
+    <img
+      src="../../assets/logo.png"
+      target="_blank"
+      alt="logo"
+      class="w-[50px]"
+    />
+  </div>
+  <div class="h-full">
+    <button
+      class="h-full px-4 py-2 text-black w-max hover:bg-orange-600 hover:text-white"
+    >
+      Home
+    </button>
+    <button
+      class="h-full px-4 py-2 text-black w-max hover:bg-orange-600 hover:text-white"
+    >
+      My To-do's
+    </button>
+  </div> -->
+  <div
+    *ngIf="isLoggedIn; else loggedIn"
+    class="flex items-center mr-5 space-x-5"
+  >
+    <button
+      (click)="logout()"
+      class="h-full px-4 py-2 text-white bg-orange-500 rounded-full w-max hover:bg-orange-600 hover:text-white"
+    >
+      Logout
+    </button>
+  </div>
+
+  <ng-template #loggedIn>
+    <div class="flex items-center mr-5 space-x-5">
+      <button
+        routerLink="/login"
+        class="h-full px-4 py-2 text-white bg-orange-500 rounded-full w-max hover:bg-orange-600 hover:text-white"
+      >
+        Login
+      </button>
+      <button
+        class="h-full px-4 py-2 text-white bg-orange-500 rounded-full w-max hover:bg-orange-600 hover:text-white"
+      >
+        Register
+      </button>
+    </div>
+  </ng-template>
+</nav>

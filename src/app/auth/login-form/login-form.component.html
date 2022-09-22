@@ -1,0 +1,61 @@
+<form
+  (ngSubmit)="handleSubmit(loginForm.value)"
+  [formGroup]="loginForm"
+  class="flex flex-col items-center justify-center w-[500px]"
+>
+  <div class="flex flex-col w-2/3 space-y-5">
+    <div class="flex flex-col w-full h-[100px]">
+      <label class="text-2xl">Email</label>
+      <input
+        class="rounded-md h-[50px] bg-orange-200/40 placeholder:p-4"
+        ngModel
+        email
+        formControlName="email"
+        type="email"
+        placeholder="Enter your email address"
+      />
+      <span class="text-red-600" *ngIf="email?.invalid && email?.touched"
+        >Email is required!
+      </span>
+    </div>
+    <div class="flex flex-col w-full">
+      <label class="text-2xl">Password</label>
+      <input
+        class="rounded-md h-[50px] bg-orange-200/40 placeholder:p-4"
+        ngModel
+        formControlName="password"
+        type="password"
+        placeholder="Enter your password"
+      />
+      <div
+        class="text-red-600"
+        *ngIf="password?.errors?.['minlength']; else lengthError"
+      >
+        *Password must be at least 6 characters long.
+      </div>
+      <ng-template #lengthError>
+        <ng-container
+          class="my-4 text-red-600"
+          *ngIf="password?.invalid && password?.touched"
+        >
+          Password is required!
+        </ng-container>
+      </ng-template>
+    </div>
+  </div>
+  <div
+    *ngIf="errorMsg"
+    class="p-4 my-4 text-white transition-all scale-75 bg-red-600 rounded-md shadow-md"
+  >
+    {{ errorMsg }}
+  </div>
+
+  <button
+    class="px-4 py-2 my-10 text-white bg-orange-500 rounded-full hover:bg-orange-400 active:bg-orange-600 disabled:bg-orange-200"
+    ngModule
+    type="submit"
+    [disabled]="!loginForm.valid"
+  >
+    Login
+  </button>
+</form>
