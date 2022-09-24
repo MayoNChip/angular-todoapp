@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom, Observable, BehaviorSubject } from 'rxjs';
 import { user } from '../auth/login-form/login';
 import { Router } from '@angular/router';
+import { TodosService } from './todos.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,19 +18,23 @@ export class AuthService {
   public isLoggedIn$: Observable<boolean> = this.isLoggedIn.asObservable();
   subject = new BehaviorSubject(123);
 
-  constructor(private http: HttpClient, public router: Router) {}
+  constructor(
+    private http: HttpClient,
+    public router: Router,
+    public todoService: TodosService
+  ) {}
 
   setIsLoggedIn(user: user) {
-    localStorage.setItem('loggedIn', 'true');
+    // localStorage.setItem('loggedIn', 'true');
     localStorage.setItem('userId', user.id.toString());
     this.isLoggedIn.next(true);
     return user.id;
   }
 
   getIsLoggedIn() {
-    const isLoggedin = localStorage.getItem('loggedIn');
-    console.log('is logged in from auth service', isLoggedin);
-    if (isLoggedin) {
+    const userId = localStorage.getItem('userId');
+    // console.log('is logged in from auth service', isLoggedin);
+    if (userId) {
       this.isLoggedIn.next(true);
       return this.isLoggedIn$;
     }
@@ -93,6 +98,7 @@ export class AuthService {
   userLogout() {
     localStorage.clear();
     this.isLoggedIn.next(false);
+    this.todoService.resetTodos();
     this.router.navigate(['/']);
   }
 }

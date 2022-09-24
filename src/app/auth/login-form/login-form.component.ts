@@ -68,7 +68,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
         console.log('success');
         //TODO: look at adding a toast
         this.successMsg = 'Successcully logged in!';
-        this.todoService.getTodosByUserId(userId)
+        // this.todoService.getTodosByUserId(userId)
         this.router.navigate(['/todos']);
         return;
       }

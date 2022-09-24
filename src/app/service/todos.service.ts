@@ -10,18 +10,19 @@ import { Todo } from '../todo-list/todos';
 export class TodosService implements OnInit {
   constructor(public http: HttpClient) {}
 
-  private userTodosTest: BehaviorSubject<Todo[]> = new BehaviorSubject<Todo[]>(
-    []
-  );
-  public userTodosTest$: Observable<Todo[]> = this.userTodosTest.asObservable();
-  userTodos: Todo[];
-
-  public updatedUserTodos: BehaviorSubject<Todo[]> = new BehaviorSubject<
+  private userTodosListener: BehaviorSubject<Todo[]> = new BehaviorSubject<
     Todo[]
   >([]);
-  public updatedUserTodos$: Observable<Todo[]> =
-    this.updatedUserTodos.asObservable();
-  userTodosWithUpdates: Todo[];
+  public userTodosListener$: Observable<Todo[]> =
+    this.userTodosListener.asObservable();
+  userTodos: Todo[];
+
+  // public updatedUserTodos: BehaviorSubject<Todo[]> = new BehaviorSubject<
+  //   Todo[]
+  // >([]);
+  // public updatedUserTodos$: Observable<Todo[]> | Todo[] =
+  //   this.updatedUserTodos.asObservable();
+  // userTodosWithUpdates: Todo[];
   isMutated: boolean = false;
 
   ngOnInit() {}
@@ -30,10 +31,14 @@ export class TodosService implements OnInit {
   //   return this.user
   // }
 
+  getTodos() {
+    return this.userTodos;
+  }
+
   getTodosByUserId(userId: number): Observable<Todo[]> {
-    if (this.isMutated) {
-      return this.updatedUserTodos$;
-    }
+    // if (this.isMutated) {
+    //   return this.updatedUserTodos$;
+    // }
     // this.updatedUserTodos.subscribe((res) => {
     //   if (res.length > 0) {
     //     return (this.userTodosWithUpdates = res);
@@ -45,6 +50,9 @@ export class TodosService implements OnInit {
     //   console.log('updated array');
     //   return this.updatedUserTodos$;
     // }
+    if (this.userTodosListener.getValue()[0]) {
+      return this.userTodosListener$;
+    }
 
     this.http
       .get<Todo[]>('https://jsonplaceholder.typicode.com/todos', {
@@ -52,10 +60,14 @@ export class TodosService implements OnInit {
           userId,
         },
       })
-      .subscribe((res) => (this.userTodos = res));
-    this.userTodosTest.next(this.userTodos);
+      .subscribe((res) => {
+        this.userTodosListener.next(res);
+      });
+    // localStorage.setItem('userTodos', JSON.stringify(this.userTodos));
+    // return this.userTodos;
+    // this.userTodosListener.next(this.userTodos);
 
-    return this.userTodosTest$;
+    return this.userTodosListener$;
   }
 
   getTodoById(todoId: number) {
@@ -75,34 +87,38 @@ export class TodosService implements OnInit {
   }
 
   updateStatusById(todoId: number, status: boolean, userId: number) {
-    const TodoToUpdate = this.userTodos.map((todo: Todo) => {
-      return todo.id === todoId;
-    });
-    const indexOfTodo = this.userTodos.findIndex((todo) => todo.id === todoId);
-    this.userTodos[indexOfTodo].completed = status;
-    if (this.isMutated) {
-      this.updatedUserTodos.next(this.userTodos);
-    }
-    this.userTodosTest.next(this.userTodos);
+    // const TodoToUpdate = this.userTodosListener.getValue().filter((todo: Todo) => {
+    //   return todo.id === todoId;
+    // });
+    const todos = this.userTodosListener.getValue();
+    const indexOfTodo = todos.findIndex((todo) => todo.id === todoId);
+    todos[indexOfTodo].completed = status;
+    this.userTodosListener.next(todos);
+    // this.userTodos[indexOfTodo].completed = status;
+    // if (this.isMutated) {
+    //   this.updatedUserTodos.next(this.userTodos);
+    // }
+    // this.userTodosListener.next(this.userTodos);
   }
 
   addNewTodo(newTodo: Todo) {
     if (typeof newTodo.userId === 'string') {
       newTodo.userId = parseInt(newTodo.userId);
     }
-    // this.userTodos.push(newTodo);
-    this.userTodos.splice(0, 0, newTodo);
+    const newTodos = this.userTodosListener.getValue();
+    newTodos.splice(0, 0, newTodo);
+    // const newTodos = this.userTodosListener.getValue().splice(0, 0, newTodo);
+    // this.userTodos.splice(0, 0, newTodo);
     // const newTodos = [...this.userTodos, newTodo];
     console.log('todos before add', this.userTodos);
     // this.userTodos = newTodos;
-    this.updatedUserTodos.next(this.userTodos);
-    this.userTodosTest.next(this.userTodos);
-    this.isMutated = true;
+    // this.updatedUserTodos.next(this.userTodos);
+    this.userTodosListener.next(newTodos);
+    // this.isMutated = true;
   }
 
   resetTodos() {
-    this.updatedUserTodos.unsubscribe();
-    this.userTodosTest.unsubscribe();
-    this.isMutated = false;
+    this.userTodosListener.next([]);
+    // this.userTodosListener.unsubscribe();
   }
 }

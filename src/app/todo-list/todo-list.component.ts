@@ -24,7 +24,7 @@ export class TodoListComponent implements OnInit {
   todosListener: Observable<any>;
   isLoggedIn: boolean;
   isModalOpen: boolean;
-  userId: string;
+  userId: number;
   limitBy: number = 40;
 
   constructor(
@@ -49,8 +49,8 @@ export class TodoListComponent implements OnInit {
       this.isLoggedIn = res;
       if (res) {
         const userId = localStorage.getItem('userId');
-        this.userId = userId!;
-        this.getUserTodos(parseInt(userId!));
+        this.userId = parseInt(userId!);
+        this.getUserTodos();
       } else {
         this.todos = [];
       }
@@ -70,23 +70,30 @@ export class TodoListComponent implements OnInit {
     });
   }
 
-  getUserTodos(userId: number) {
-    this.todosService.getTodosByUserId(userId).subscribe((res) => {
-      let todosWithIndex: Todo[] = [];
-      const newTodos = res.map((todo, i) => {
-        if (typeof todo.userId === 'string') {
-          parseInt(todo.userId);
-        }
-        const todoWithIndex = { ...todo, i };
-        return todoWithIndex;
-      });
-      console.log('new todos after adding index', newTodos);
-      const sortedTodos = newTodos.sort((a, b) =>
-        a.i == b.i ? 0 : a.i > b.i ? 1 : -1
-      );
-      this.todos = sortedTodos;
+  getUserTodos() {
+    this.todosService.getTodosByUserId(this.userId).subscribe((res) => {
+      console.log(res);
+      this.todos = res;
       this.cd.detectChanges();
     });
+
+    // .subscribe((res) => {
+    //   let todosWithIndex: Todo[] = [];
+    //   const newTodos = res.map((todo, i) => {
+    //     if (typeof todo.userId === 'string') {
+    //       parseInt(todo.userId);
+    //     }
+    //     const todoWithIndex = { ...todo, i };
+    //     return todoWithIndex;
+    //   });
+    //   console.log('new todos after adding index', newTodos);
+    //   const sortedTodos = newTodos.sort((a, b) =>
+    //     a.i == b.i ? 0 : a.i > b.i ? 1 : -1
+    //   );
+    //   this.todos = sortedTodos;
+    //   this.cd.detectChanges();
+    // });
+    // this.todos = this.todosService.getTodos();
   }
 
   openTodoDialog(todo?: Todo) {
