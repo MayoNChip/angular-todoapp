@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { AuthService } from '../service/auth.service';
 import { TodosService } from '../service/todos.service';
 import { navbarItems } from './data/navbar.items';
@@ -18,6 +18,7 @@ import { navbarItems } from './data/navbar.items';
 export class NavbarComponent implements OnInit {
   navbarItems = navbarItems;
   isLoggedIn: boolean;
+  public innerWidth: number;
 
   constructor(
     public authService: AuthService,
@@ -29,6 +30,11 @@ export class NavbarComponent implements OnInit {
       console.log(isLogged);
       return (this.isLoggedIn = isLogged);
     });
+    this.innerWidth = window.innerWidth;
+  }
+
+  checkWindowSize() {
+    console.log('window size', this.innerWidth);
   }
 
   logout() {
@@ -36,4 +42,6 @@ export class NavbarComponent implements OnInit {
 
     this.authService.userLogout();
   }
+
+  encapsulation: ViewEncapsulation.None;
 }

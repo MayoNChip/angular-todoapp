@@ -7,7 +7,7 @@ import { Todo } from '../todo-list/todos';
 @Injectable({
   providedIn: 'root',
 })
-export class TodosService implements OnInit {
+export class TodosService {
   constructor(public http: HttpClient) {}
 
   private userTodosListener: BehaviorSubject<Todo[]> = new BehaviorSubject<
@@ -15,41 +15,16 @@ export class TodosService implements OnInit {
   >([]);
   public userTodosListener$: Observable<Todo[]> =
     this.userTodosListener.asObservable();
-  userTodos: Todo[];
 
-  // public updatedUserTodos: BehaviorSubject<Todo[]> = new BehaviorSubject<
-  //   Todo[]
-  // >([]);
-  // public updatedUserTodos$: Observable<Todo[]> | Todo[] =
-  //   this.updatedUserTodos.asObservable();
-  // userTodosWithUpdates: Todo[];
-  isMutated: boolean = false;
+  public onlyCompletedTodos: BehaviorSubject<Todo[]> = new BehaviorSubject<
+    Todo[]
+  >([]);
+  public onlyCompletedTodos$: Observable<Todo[]> =
+    this.onlyCompletedTodos.asObservable();
 
-  ngOnInit() {}
-
-  // getLastTodoId():Todo[] {
-  //   return this.user
-  // }
-
-  getTodos() {
-    return this.userTodos;
-  }
+  todosNoFilter: Todo[];
 
   getTodosByUserId(userId: number): Observable<Todo[]> {
-    // if (this.isMutated) {
-    //   return this.updatedUserTodos$;
-    // }
-    // this.updatedUserTodos.subscribe((res) => {
-    //   if (res.length > 0) {
-    //     return (this.userTodosWithUpdates = res);
-    //   }
-    //   return;
-    // });
-
-    // if (!this.userTodosWithUpdates) {
-    //   console.log('updated array');
-    //   return this.updatedUserTodos$;
-    // }
     if (this.userTodosListener.getValue()[0]) {
       return this.userTodosListener$;
     }
@@ -63,17 +38,16 @@ export class TodosService implements OnInit {
       .subscribe((res) => {
         this.userTodosListener.next(res);
       });
-    // localStorage.setItem('userTodos', JSON.stringify(this.userTodos));
-    // return this.userTodos;
-    // this.userTodosListener.next(this.userTodos);
-
     return this.userTodosListener$;
   }
 
   getTodoById(todoId: number) {
-    if (this.userTodos) {
-      console.log('userTodos from get todo details', this.userTodos);
-      const filteredTodo = this.userTodos.filter((todo) => {
+    if (this.userTodosListener) {
+      console.log(
+        'userTodos from get todo details',
+        this.userTodosListener.getValue()
+      );
+      const filteredTodo = this.userTodosListener.getValue().filter((todo) => {
         return todoId === todo.id;
       });
       if (filteredTodo.length !== 1) {
@@ -87,38 +61,52 @@ export class TodosService implements OnInit {
   }
 
   updateStatusById(todoId: number, status: boolean, userId: number) {
-    // const TodoToUpdate = this.userTodosListener.getValue().filter((todo: Todo) => {
-    //   return todo.id === todoId;
-    // });
     const todos = this.userTodosListener.getValue();
     const indexOfTodo = todos.findIndex((todo) => todo.id === todoId);
     todos[indexOfTodo].completed = status;
+    todos[indexOfTodo].new = false;
     this.userTodosListener.next(todos);
-    // this.userTodos[indexOfTodo].completed = status;
-    // if (this.isMutated) {
-    //   this.updatedUserTodos.next(this.userTodos);
-    // }
-    // this.userTodosListener.next(this.userTodos);
   }
 
   addNewTodo(newTodo: Todo) {
     if (typeof newTodo.userId === 'string') {
       newTodo.userId = parseInt(newTodo.userId);
     }
+    console.log('new todo id', newTodo.id);
     const newTodos = this.userTodosListener.getValue();
     newTodos.splice(0, 0, newTodo);
-    // const newTodos = this.userTodosListener.getValue().splice(0, 0, newTodo);
-    // this.userTodos.splice(0, 0, newTodo);
-    // const newTodos = [...this.userTodos, newTodo];
-    console.log('todos before add', this.userTodos);
-    // this.userTodos = newTodos;
-    // this.updatedUserTodos.next(this.userTodos);
     this.userTodosListener.next(newTodos);
-    // this.isMutated = true;
+    return true;
   }
 
   resetTodos() {
     this.userTodosListener.next([]);
-    // this.userTodosListener.unsubscribe();
+  }
+
+  deleteDups(array: Todo[]) {
+    var a = array.concat();
+    for (var i = 0; i < a.length; ++i) {
+      for (var j = i + 1; j < a.length; ++j) {
+        if (a[i] === a[j]) a.splice(j--, 1);
+      }
+    }
+
+    return a;
+  }
+
+  toggleCompleted(newState: boolean) {
+    const OnlyCompletedTodos = this.userTodosListener
+      .getValue()
+      .filter((todo) => todo.completed === !newState);
+    if (newState) {
+      this.todosNoFilter = this.userTodosListener.getValue();
+      return this.userTodosListener.next(OnlyCompletedTodos);
+    } else {
+      var todos = this.deleteDups(
+        this.todosNoFilter.concat(this.userTodosListener.getValue())
+      );
+      console.log('todos after concat', todos);
+      this.userTodosListener.next(todos);
+    }
   }
 }

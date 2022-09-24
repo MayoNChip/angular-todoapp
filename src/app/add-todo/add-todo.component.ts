@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Todo } from '../todo-list/todos';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { TodosService } from '../service/todos.service';
 
 @Component({
@@ -18,7 +18,8 @@ export class AddTodoComponent implements OnInit {
     public data: { userId: number; userTodosLength: number },
     public fb: FormBuilder,
     public dialog: MatDialog,
-    public todosService: TodosService
+    public todosService: TodosService,
+    public toast: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -41,8 +42,6 @@ export class AddTodoComponent implements OnInit {
   }
 
   handleAddTodo(value: { title: string; content: string }) {
-    console.log('adding...', this.data);
-    // const lastTodoId = this.data[this.todosService.userTodos.length -1]
     const newTodo = {
       userId: this.data.userId,
       id: this.data.userTodosLength + 1,
@@ -51,8 +50,14 @@ export class AddTodoComponent implements OnInit {
       completed: false,
       new: true,
     };
-    console.log('new to do', newTodo);
-    this.todosService.addNewTodo(newTodo);
+    const addTodoResponse = this.todosService.addNewTodo(newTodo);
+    if (addTodoResponse) {
+      this.toast.open('Successfully added To-do', 'Dismiss', {
+        duration: 3000,
+        panelClass: ['success-toast'],
+        horizontalPosition: 'left',
+      });
+    }
     this.closeDialog();
   }
 

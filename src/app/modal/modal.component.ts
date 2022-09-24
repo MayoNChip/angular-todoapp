@@ -23,6 +23,9 @@ export class ModalComponent implements OnInit {
 
   toggleTodoStatus(todoData: Todo) {
     this.data.completed = !todoData.completed;
+    if(this.data.new) {
+      this.data.new = false
+    } 
     console.log('to do data new todo', todoData);
     this.todoService.updateStatusById(
       todoData.id,

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
 import { TodosService } from 'src/app/service/todos.service';
 import { user } from './login';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login-form',
@@ -21,7 +22,8 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     public fb: FormBuilder,
     public authService: AuthService,
     private router: Router,
-    public todoService: TodosService
+    public todoService: TodosService,
+    public genToast: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -58,6 +60,10 @@ export class LoginFormComponent implements OnInit, OnDestroy {
       }
       if (response.body && response.body.length < 1) {
         console.log('Error no such user');
+        this.genToast.open('User with this email does not exists', 'Dismiss', {
+          duration:3000,
+          panelClass: 'failure-toast'
+        });
         this.errorMsg = 'User with this email does not exists';
         return;
       }
@@ -66,9 +72,13 @@ export class LoginFormComponent implements OnInit, OnDestroy {
         this.userLoginResponse = response.body[0];
         const userId = this.authService.setIsLoggedIn(response.body[0]);
         console.log('success');
+
         //TODO: look at adding a toast
-        this.successMsg = 'Successcully logged in!';
-        // this.todoService.getTodosByUserId(userId)
+
+        this.genToast.open('Succesfully Logged In', 'Dismiss', {
+          duration: 2000,
+          panelClass: 'success-toast'
+        });
         this.router.navigate(['/todos']);
         return;
       }

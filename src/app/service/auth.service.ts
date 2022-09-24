@@ -10,8 +10,7 @@ import { TodosService } from './todos.service';
 })
 export class AuthService {
   allUsers: user[];
-  private currentUser: user;
-  // public isLoggedIn = localStorage.getItem('loggedIn') || false;
+  public currentUser: user;
   private isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
   );
@@ -42,35 +41,14 @@ export class AuthService {
     return this.isLoggedIn$;
   }
 
-  getUserDetails(userId: number) {
-    // const userId = localStorage.getItem('userId');
-    console.log('userId from get user details', userId);
+  getUserDetails() {
     if (this.currentUser) {
-      console.log('current user from auth', this.currentUser);
       return this.currentUser;
     }
-
-    const res = this.http.get<user[]>(
-      `https://jsonplaceholder.typicode.com/users`,
-      {
-        params: {
-          id: userId,
-        },
-        observe: 'response',
-      }
-    );
-    const httpRes = firstValueFrom(res);
-    httpRes.then((res) => {
-      if (res.body && res.body.length === 1) {
-        this.currentUser = res.body[0];
-        return this.setIsLoggedIn(res.body[0]);
-      }
-      return {
-        success: false,
-        message: 'Something went wrong, please re-login',
-      };
-    });
-    return;
+    if (this.isLoggedIn.getValue()) {
+      const userDetailsJson = localStorage.getItem('userDetails');
+      return JSON.parse(userDetailsJson!);
+    }
   }
 
   userLogin(email: string) {
@@ -87,6 +65,7 @@ export class AuthService {
     user.then((res) => {
       if (res.body) {
         this.currentUser = res.body[0];
+        localStorage.setItem('userDetails', JSON.stringify(res.body[0]));
         return this.setIsLoggedIn(res.body[0]);
       }
       return false;

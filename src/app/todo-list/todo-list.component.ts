@@ -3,6 +3,7 @@ import {
   Component,
   Input,
   OnInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../service/auth.service';
@@ -12,7 +13,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from '../modal/modal.component';
 import { Observable } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
-
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { user } from '../auth/login-form/login';
 @Component({
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
@@ -26,47 +29,40 @@ export class TodoListComponent implements OnInit {
   isModalOpen: boolean;
   userId: number;
   limitBy: number = 40;
+  userDetails: user;
+
+  // Toggle State
+  onlyCompletedChecked: boolean = false;
 
   constructor(
     public todosService: TodosService,
     public authService: AuthService,
     public router: Router,
     public modal: MatDialog,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer
   ) {
-    // const userId = localStorage.getItem('userId');
-    // if (!userId) {
-    //   console.log('user not logged in');
-    //   return;
-    // }
-    // this.userId = userId;
-    // console.log('user logged in, user id =>', userId);
+    this.matIconRegistry.addSvgIcon(
+      `addTodoIconSvg`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        `../../assets/icons8-plus.svg`
+      )
+    );
   }
 
   ngOnInit(): void {
-    console.log(this.todos);
     this.authService.getIsLoggedIn().subscribe((res) => {
       this.isLoggedIn = res;
       if (res) {
         const userId = localStorage.getItem('userId');
         this.userId = parseInt(userId!);
+        this.userDetails = this.authService.getUserDetails();
+
         this.getUserTodos();
       } else {
         this.todos = [];
       }
-    });
-  }
-
-  // handleTodoClick = (todoId: number) => {
-  //   console.log(todoId);
-  //   // this.router.navigate(['tododetails', todoId]);
-  //   this.isModalOpen = true;
-  // };
-
-  handleAddTodo() {
-    this.modal.open(ModalComponent, {
-      width: '860px',
-      panelClass: 'custom-dialog-container',
     });
   }
 
@@ -76,24 +72,13 @@ export class TodoListComponent implements OnInit {
       this.todos = res;
       this.cd.detectChanges();
     });
+  }
 
-    // .subscribe((res) => {
-    //   let todosWithIndex: Todo[] = [];
-    //   const newTodos = res.map((todo, i) => {
-    //     if (typeof todo.userId === 'string') {
-    //       parseInt(todo.userId);
-    //     }
-    //     const todoWithIndex = { ...todo, i };
-    //     return todoWithIndex;
-    //   });
-    //   console.log('new todos after adding index', newTodos);
-    //   const sortedTodos = newTodos.sort((a, b) =>
-    //     a.i == b.i ? 0 : a.i > b.i ? 1 : -1
-    //   );
-    //   this.todos = sortedTodos;
-    //   this.cd.detectChanges();
-    // });
-    // this.todos = this.todosService.getTodos();
+  handleAddTodo() {
+    this.modal.open(ModalComponent, {
+      width: '860px',
+      panelClass: 'custom-dialog-container',
+    });
   }
 
   openTodoDialog(todo?: Todo) {
@@ -102,7 +87,7 @@ export class TodoListComponent implements OnInit {
       this.modal.open(ModalComponent, {
         data: {
           ...todo,
-          isNew: false,
+          new: todo.new ? todo.new : false,
           userId: this.userId,
         },
         width: '860px',
@@ -119,4 +104,12 @@ export class TodoListComponent implements OnInit {
       });
     }
   }
+
+  toggleOnlyCompleted() {
+    console.log(this.onlyCompletedChecked);
+
+    this.todosService.toggleCompleted(this.onlyCompletedChecked);
+  }
+
+  encapsulation: ViewEncapsulation.None;
 }

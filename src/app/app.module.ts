@@ -19,9 +19,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { ModalComponent } from './modal/modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,6 +51,11 @@ import { MatSelectModule } from '@angular/material/select';
     MatSliderModule,
     MatDialogModule,
     MatSelectModule,
+    MatIconModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatTooltipModule,
+    MatMenuModule,
   ],
   providers: [FirebaseService, AuthService],
   bootstrap: [AppComponent],
