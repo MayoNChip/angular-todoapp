@@ -23,6 +23,7 @@ export class AuthService {
     localStorage.setItem('loggedIn', 'true');
     localStorage.setItem('userId', user.id.toString());
     this.isLoggedIn.next(true);
+    return user.id;
   }
 
   getIsLoggedIn() {

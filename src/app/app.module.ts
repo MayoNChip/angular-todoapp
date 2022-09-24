@@ -20,6 +20,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { ModalComponent } from './modal/modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
 
+import { MatSelectModule } from '@angular/material/select';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,6 +47,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     BrowserAnimationsModule,
     MatSliderModule,
     MatDialogModule,
+    MatSelectModule,
   ],
   providers: [FirebaseService, AuthService],
   bootstrap: [AppComponent],

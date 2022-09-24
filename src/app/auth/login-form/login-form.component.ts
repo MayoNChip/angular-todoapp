@@ -1,18 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { ApplicationRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
-import { FirebaseService } from 'src/app/service/firebase.service';
+import { TodosService } from 'src/app/service/todos.service';
 import { user } from './login';
-
-interface Note {
-  id: string;
-  title: string;
-  content: string;
-  createdAt: Date;
-  modifiedAt: Date;
-}
 
 @Component({
   selector: 'app-login-form',
@@ -30,7 +21,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     public fb: FormBuilder,
     public authService: AuthService,
     private router: Router,
-    public appRef: ApplicationRef
+    public todoService: TodosService
   ) {}
 
   ngOnInit(): void {
@@ -59,10 +50,6 @@ export class LoginFormComponent implements OnInit, OnDestroy {
       return (this.errorMsg = 'Please enter all required fields');
     }
     this.errorMsg = '';
-    //     if (valid.length < 1) {
-    //       return (this.errorMsg = 'User with this username does not exists');
-    //     }
-    //     return this.router.navigate(['/todos']);
 
     this.authService.userLogin(userData.email).then((response) => {
       if (!response.ok) {
@@ -77,16 +64,15 @@ export class LoginFormComponent implements OnInit, OnDestroy {
       if (response.body) {
         console.log(response.body);
         this.userLoginResponse = response.body[0];
-        this.authService.setIsLoggedIn(response.body[0]);
+        const userId = this.authService.setIsLoggedIn(response.body[0]);
         console.log('success');
         //TODO: look at adding a toast
         this.successMsg = 'Successcully logged in!';
-        this.appRef.tick();
+        this.todoService.getTodosByUserId(userId)
         this.router.navigate(['/todos']);
         return;
       }
     });
-    console.log('dont know what that means');
     return;
   }
 }

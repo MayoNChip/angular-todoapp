@@ -1,29 +1,96 @@
 <div
-  *ngIf="data; else addTodoModal"
-  class="flex flex-col items-center w-full h-full"
+  *ngIf="data.id; else addTodoModal"
+  class="relative flex flex-col items-center w-full h-[480px] p-2 bg-white rounded-md shadow"
 >
-  <div class="self-start font-semibold text-orange-600 text-8xl">
-    <h1 mat-dialog-title>
-      {{ data.title | titlecase }}
-    </h1>
-  </div>
+  <!-- <div class="absolute top-0 flex w-1/2 -z-[1]">
+    <img src="../../assets/taskmodalart.png" />
+  </div> -->
   <div
-    *ngIf="data.completed; else notCompleted"
-    mat-dialog-content
-    class="flex flex-col items-center justify-center p-2 m-0 text-green-300 scale-50 bg-green-600 border-4 rounded shadow-inner border-green-700/50"
+    style="background-image: url('../../assets/taskmodalart.png')"
+    class="w-full h-full bg-left-bottom bg-opacity-0 bg-[length:500px] bg-no-repeat flex flex-col items-center"
   >
-    <h1 class="text-xl m0">To-do Completed!</h1>
-  </div>
-  <ng-template class="" #notCompleted>
-    <div
-      class="flex flex-col items-center justify-center p-2 text-2xl scale-50 bg-red-500 border-4 rounded-md w-fit border-red-600/50"
-    >
-      <h1 class="m-0 text-xl text-center">To-do waiting...</h1>
+    <div class="flex items-center justify-center w-full">
+      <h1 mat-dialog-title class="font-semibold text-orange-600 text-8xl">
+        {{ data.title | titlecase }}
+      </h1>
     </div>
-  </ng-template>
-  <div class="flex justify-between w-full p-4 text-sm text-gray-700 h-fit">
-    <h1>Created at:</h1>
-    <h1>Date</h1>
+    <div class="flex items-center justify-center w-2/3">
+      <div class="flex flex-col w-full">
+        <div
+          class="flex self-center justify-between w-2/3 p-2 text-sm text-gray-700 h-fit"
+        >
+          <h1>Created at:</h1>
+          <h1>Date</h1>
+        </div>
+        <div
+          class="flex items-center self-center justify-between w-2/3 h-10 p-2"
+        >
+          <h1 class="text-orange-600">Status</h1>
+          <div *ngIf="data.completed; else notCompleted" mat-dialog-content>
+            <!-- class="flex items-center justify-center p-1 bg-green-600 border-2 rounded-md w-fit border-green-600/50" -->
+
+            <div
+              class="flex flex-col items-center justify-center p-1 bg-green-600 border-2 rounded-md border-green-600/50"
+            >
+              <h1 class="m-0 text-[12px] text-center">Completed</h1>
+            </div>
+            <!-- <h1 class="text-[12px] m-0 text-center">Completed!</h1> -->
+          </div>
+          <ng-template class="" #notCompleted>
+            <div
+              class="flex flex-col items-center justify-center p-1 bg-orange-500 border-2 rounded-md border-orange-600/50"
+            >
+              <h1 class="m-0 text-[12px] text-center">Incomplete</h1>
+            </div>
+          </ng-template>
+        </div>
+        <div
+          *ngIf="data.new && !data.completed"
+          class="flex items-center justify-center text-orange-600 bg-orange-300 rounded-full py-[3px] px-[8px]"
+        >
+          <h1 class="font-mono text-sm">NEW TODO</h1>
+        </div>
+      </div>
+    </div>
+
+    <!-- TODO BODY -->
+
+    <div *ngIf="data.content" class="flex flex-col w-2/3 h-[220px] my-2">
+      <!-- <h1 class="my-2 text-xl text-gray-500">To-do Body</h1> -->
+      <div class="w-full h-full p-4 rounded shadow-inner bg-gray-500/20">
+        <p class="text-gray-800 text-md">{{ data.content }}</p>
+      </div>
+    </div>
+
+    <!-- DIALOG BUTTONS -->
+    <div class="absolute flex justify-between w-2/4 bottom-10">
+      <button
+        class="px-4 py-2 text-orange-600 bg-orange-100 border border-orange-500 rounded-full hover:bg-orange-400 focus-visible:outline-none"
+      >
+        Edit
+      </button>
+      <button
+        *ngIf="!data.completed; else setIncomplete"
+        (click)="toggleTodoStatus(data)"
+        class="px-4 py-2 text-white bg-green-500 rounded-full hover:bg-green-700 focus-visible:outline-none"
+      >
+        Set Done
+      </button>
+      <ng-template class="" #setIncomplete>
+        <button
+          (click)="toggleTodoStatus(data)"
+          class="px-4 py-2 text-sm text-white bg-orange-500 rounded-full hover:bg-orange-700 focus-visible:outline-none"
+        >
+          Set Incomplete
+        </button>
+      </ng-template>
+      <button
+        (click)="closeDialog()"
+        class="px-4 py-2 text-white bg-red-500 rounded-full hover:bg-red-700 focus-visible:outline-none"
+      >
+        Close
+      </button>
+    </div>
   </div>
 </div>
 

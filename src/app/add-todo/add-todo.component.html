@@ -1,1 +1,78 @@
-<div class="flex flex-col w-full h-full"></div>
+<div class="flex flex-col w-full h-full">
+  <div class="flex items-center justify-center">
+    <h1 class="text-4xl text-gray-600">Add New To-do</h1>
+  </div>
+  <form
+    (ngSubmit)="handleAddTodo(addNewTodoForm.value)"
+    [formGroup]="addNewTodoForm"
+    class="flex flex-col items-center justify-center w-[500px]"
+  >
+    <div class="flex flex-col justify-between w-3/4 my-10">
+      <div class="flex flex-col justify-start w-full space-x-2 h-[60px]">
+        <div class="flex items-center self-center justify-between w-5/6">
+          <label class="text-2xl text-gray-500">To-do Title</label>
+          <input
+            class="p-1 text-orange-500 bg-transparent border-b focus-visible:outline-none focus:border-orange-500 border-b-orange-300"
+            ngModel
+            title
+            formControlName="title"
+            type="text"
+            placeholder="Enter To-do Title"
+          />
+        </div>
+        <span
+          class="text-center text-red-600"
+          *ngIf="title?.invalid && title?.touched"
+          >Title is required!
+        </span>
+      </div>
+      <div class="flex flex-col justify-start w-full space-x-2 h-[100px]">
+        <div class="flex flex-col w-full">
+          <label class="text-2xl text-gray-500">To-do body</label>
+          <textarea
+            rows="4"
+            cols="50"
+            class="p-2 text-orange-500 rounded-md bg-orange-100/40 focus-visible:outline-none focus:bg-white placeholder:focus-within:text-gray-500 placeholder:text-orange-600/50"
+            ngModel
+            formControlName="content"
+            type="content"
+            placeholder="Start typing your to-do here"
+          ></textarea>
+        </div>
+        <div
+          class="text-red-600"
+          *ngIf="content?.errors?.['maxlength']; else lengthError"
+        >
+          Exceeded Max characters (maximum 250)
+        </div>
+        <ng-template #lengthError>
+          <ng-container *ngIf="content?.invalid && content?.touched">
+            <h1 class="text-red-600">To-do body is required!</h1>
+          </ng-container>
+        </ng-template>
+      </div>
+    </div>
+    <!-- <div
+      *ngIf="errorMsg"
+      class="p-4 my-4 text-white transition-all scale-75 bg-red-600 rounded-md shadow-md"
+    >
+      {{ errorMsg }}
+    </div> -->
+    <div class="flex flex-col w-full mt-10 space-y-4">
+      <button
+        class="px-4 py-2 text-white bg-orange-500 rounded-full hover:bg-orange-400 active:bg-orange-600 disabled:bg-orange-200"
+        ngModule
+        type="submit"
+        [disabled]="!addNewTodoForm.valid"
+      >
+        Add To-do
+      </button>
+      <button
+        class="px-4 py-2 text-white bg-orange-500 rounded-full hover:bg-orange-400 active:bg-orange-600 disabled:bg-orange-200"
+        (click)="closeDialog()"
+      >
+        Cancle
+      </button>
+    </div>
+  </form>
+</div>

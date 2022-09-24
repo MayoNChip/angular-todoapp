@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '../service/auth.service';
+import { TodosService } from '../service/todos.service';
 import { navbarItems } from './data/navbar.items';
 
 // interface Todo {
@@ -18,7 +19,10 @@ export class NavbarComponent implements OnInit {
   navbarItems = navbarItems;
   isLoggedIn: boolean;
 
-  constructor(public authService: AuthService) {}
+  constructor(
+    public authService: AuthService,
+    public todoService: TodosService
+  ) {}
 
   ngOnInit(): void {
     this.authService.getIsLoggedIn().subscribe((isLogged) => {
@@ -28,6 +32,8 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
+    this.todoService.resetTodos();
+
     this.authService.userLogout();
   }
 }
