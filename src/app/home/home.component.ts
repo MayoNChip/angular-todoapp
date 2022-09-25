@@ -45,8 +45,4 @@ export class HomeComponent implements OnInit {
     });
     this.userDetails = this.authService.getUserDetails();
   }
-
-  navToLogin() {
-    this.router.navigate(['/login']);
-  }
 }

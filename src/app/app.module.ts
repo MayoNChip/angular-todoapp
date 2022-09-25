@@ -21,11 +21,13 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { HomeComponent } from './home/home.component';
+import { RouterModule } from '@angular/router';
+
 @NgModule({
   declarations: [
+    routingComponents,
     AppComponent,
     NavbarComponent,
-    routingComponents,
     AddTodoComponent,
     TodoCardComponent,
     AuthComponent,
@@ -48,6 +50,7 @@ import { HomeComponent } from './home/home.component';
     MatSnackBarModule,
     MatTooltipModule,
     MatMenuModule,
+    RouterModule,
   ],
   providers: [AuthService],
   bootstrap: [AppComponent],

@@ -1,14 +1,6 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { AuthService } from '../service/auth.service';
 import { TodosService } from '../service/todos.service';
-import { navbarItems } from './data/navbar.items';
-
-// interface Todo {
-//   userId: number;
-//   id: number;
-//   title: string;
-//   completed: boolean;
-// }
 
 @Component({
   selector: 'app-navbar',
@@ -16,7 +8,19 @@ import { navbarItems } from './data/navbar.items';
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit {
-  navbarItems = navbarItems;
+  navbarItems = [
+    {
+      id: 1,
+      title: 'Home',
+      path: '/home',
+    },
+    {
+      id: 2,
+      title: "My Todo's",
+      path: '/todos',
+    },
+  ];
+
   isLoggedIn: boolean;
   public innerWidth: number;
 
