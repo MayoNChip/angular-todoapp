@@ -1,0 +1,123 @@
+<div class="flex flex-col w-full h-full">
+  <div class="flex w-full bg-gray-700 md:h-[400px] shadow shadow-black">
+    <div
+      style="background-image: url('../assets/welcomeart.png')"
+      class="w-full h-full bg-right-top bg-opacity-0 bg-[length:1000px] bg-no-repeat flex flex-col items-center"
+    >
+      <div class="flex justify-between w-full mt-10 h-fit md:flex-row">
+        <div
+          class="flex flex-row items-center justify-center w-full mt-4 space-x-2 md:mt-28 md:ml-10 md:h-full md:space-x-0 md:items-baseline md:w-1/2 md:flex-col"
+        >
+          <h1
+            *ngIf="isLoggedIn; else notLoggedInTitle"
+            class="font-semibold text-gray-100 md:text-4xl sm:text-xl"
+          >
+            Welcome back,
+          </h1>
+          <ng-template #notLoggedInTitle>
+            <h1 class="font-semibold text-gray-100 md:text-4xl sm:text-xl">
+              Welcome!
+            </h1>
+          </ng-template>
+          <h1
+            *ngIf="userDetails"
+            class="text-2xl font-semibold text-orange-400 md:text-6xl"
+          >
+            {{ userDetails.name }}
+          </h1>
+          <h1
+            *ngIf="!userDetails; else loggedInText"
+            class="w-1/2 text-xl text-gray-300 md:mt-4"
+          >
+            Our app offers you a neat and comofy way of organizing your to-do's
+            during your day-to-day
+          </h1>
+          <ng-template #loggedInText>
+            <h1 class="w-1/2 text-xl text-gray-300 md:mt-4">
+              Happy to see you again, jump in to your to-do's - We believe in
+              you!
+            </h1>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    *ngIf="isLoggedIn; else notLoggedInHomeContent"
+    class="w-full h-[250px] flex justify-evenly mt-10"
+  >
+    <div
+      class="flex flex-col bg-gray-300 rounded shadow-md md:w-60 md:h-80 shadow-black md:items-center"
+    >
+      <div class="flex items-center w-2/3 md:justify-center h-1/2">
+        <h1 class="text-2xl font-medium text-center">
+          Number of waiting To-do's
+        </h1>
+      </div>
+      <div
+        class="flex justify-center w-full text-6xl font-semibold text-orange-600"
+      >
+        {{ userWaitingTodos.length }}
+      </div>
+      <div
+        class="flex flex-col items-center justify-center w-full text-orange-300 bg-orange-600 md:mt-4"
+      >
+        <div class="flex items-center justify-center w-full h-full">
+          <h1
+            class="text-2xl font-medium"
+            *ngIf="userWaitingTodos.length < 2; else keepItUp"
+          >
+            Good job, Almost done!
+          </h1>
+        </div>
+        <ng-template #keepItUp>
+          <div class="flex items-center justify-center w-5/6 h-full">
+            <h1 class="text-2xl font-medium text-center">
+              Chop chop, alot of work to be done!
+            </h1>
+            <!-- <h1>Hellasfasfasda sdfasfasd sdsdfasdfasdfadfasdfo</h1> -->
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <div
+      class="flex flex-col bg-gray-300 rounded shadow-md md:w-60 md:h-80 shadow-black md:items-center"
+    >
+      <div class="flex items-center w-2/3 md:justify-center h-1/2">
+        <h1 class="text-2xl font-medium text-center">
+          Number of completed<br />To-do's
+        </h1>
+      </div>
+      <div
+        class="flex justify-center w-full text-6xl font-semibold text-green-600"
+      >
+        {{ userCompletedTodos.length }}
+      </div>
+      <div
+        class="flex items-center justify-center w-full text-green-300 bg-green-600 h-14 md:mt-4"
+      >
+        <h1
+          class="text-2xl font-medium"
+          *ngIf="userCompletedTodos.length > 5; else keepItUp"
+        >
+          Wow! Impressive!
+        </h1>
+        <ng-template #keepItUp>
+          <h1 class="text-2xl font-medium">Keep it up!!</h1>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <ng-template #notLoggedInHomeContent>
+    <div class="w-full h-[250px] flex justify-evenly mt-10">
+      <h1 class="text-3xl text-gray-300">
+        To continute, please
+        <a
+          class="text-orange-500 cursor-pointer hover:text-orange-700"
+          (click)="navToLogin()"
+          >login</a
+        >
+      </h1>
+    </div>
+  </ng-template>
+</div>

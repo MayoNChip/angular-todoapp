@@ -8,11 +8,6 @@ import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { AuthComponent } from './auth/auth.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginFormComponent } from './auth/login-form/login-form.component';
-import { environment } from 'src/environments/environment';
-import { FirebaseService } from './service/firebase.service';
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAnalyticsModule } from '@angular/fire/compat/analytics';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './service/auth.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -25,6 +20,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
+import { HomeComponent } from './home/home.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,17 +31,13 @@ import { MatMenuModule } from '@angular/material/menu';
     AuthComponent,
     LoginFormComponent,
     ModalComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    // provideFirebaseApp(() => initializeApp(environment.firebase)),
-    // provideFirestore(() => getFirestore()),
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAnalyticsModule,
-    AngularFirestoreModule,
     HttpClientModule,
     BrowserAnimationsModule,
     MatSliderModule,
@@ -57,7 +49,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatTooltipModule,
     MatMenuModule,
   ],
-  providers: [FirebaseService, AuthService],
+  providers: [AuthService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

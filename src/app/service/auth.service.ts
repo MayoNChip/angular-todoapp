@@ -22,6 +22,7 @@ export class AuthService {
     public router: Router,
     public todoService: TodosService
   ) {}
+  redirectUrl: string;
 
   setIsLoggedIn(user: user) {
     // localStorage.setItem('loggedIn', 'true');

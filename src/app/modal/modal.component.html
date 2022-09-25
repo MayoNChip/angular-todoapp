@@ -2,9 +2,6 @@
   *ngIf="data.id; else addTodoModal"
   class="relative flex flex-col items-center w-full h-[480px] p-2 bg-white rounded-md shadow"
 >
-  <!-- <div class="absolute top-0 flex w-1/2 -z-[1]">
-    <img src="../../assets/taskmodalart.png" />
-  </div> -->
   <div
     style="background-image: url('../../assets/taskmodalart.png')"
     class="w-full h-full bg-left-bottom bg-opacity-0 bg-[length:500px] bg-no-repeat flex flex-col items-center"
@@ -76,7 +73,7 @@
       >
         Set Done
       </button>
-      <ng-template class="" #setIncomplete>
+      <ng-template #setIncomplete>
         <button
           (click)="toggleTodoStatus(data)"
           class="px-4 py-2 text-sm text-white bg-orange-500 rounded-full hover:bg-orange-700 focus-visible:outline-none"

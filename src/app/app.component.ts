@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { user } from './auth/login-form/login';
 import { AuthService } from './service/auth.service';
 
 @Component({
@@ -8,12 +9,9 @@ import { AuthService } from './service/auth.service';
 })
 export class AppComponent implements OnInit {
   isLoggedIn: boolean;
+  userDetails: user;
 
   constructor(public authService: AuthService) {}
 
-  ngOnInit(): void {
-    const isLogged = this.authService
-      .getIsLoggedIn()
-      .subscribe((res) => (this.isLoggedIn = res));
-  }
+  ngOnInit(): void {}
 }

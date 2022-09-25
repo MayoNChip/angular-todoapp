@@ -62,6 +62,7 @@ export class TodoListComponent implements OnInit {
         this.getUserTodos();
       } else {
         this.todos = [];
+        this.router.navigate(['/login']);
       }
     });
   }
