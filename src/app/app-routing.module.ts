@@ -6,7 +6,6 @@ import { AuthComponent } from './auth/auth.component';
 import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
   {
     path: 'todos',
     component: TodoListComponent,
@@ -15,12 +14,12 @@ const routes: Routes = [
     path: 'login',
     component: AuthComponent,
   },
-
-  // {
-  //   path: '**',
-  //   redirectTo: 'home',
-  //   pathMatch: 'full',
-  // },
+  { path: 'home', component: HomeComponent },
+  {
+    path: '**',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({

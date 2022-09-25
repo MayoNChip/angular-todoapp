@@ -61,8 +61,8 @@ export class LoginFormComponent implements OnInit, OnDestroy {
       if (response.body && response.body.length < 1) {
         console.log('Error no such user');
         this.genToast.open('User with this email does not exists', 'Dismiss', {
-          duration:3000,
-          panelClass: 'failure-toast'
+          duration: 3000,
+          panelClass: 'failure-toast',
         });
         this.errorMsg = 'User with this email does not exists';
         return;
@@ -77,9 +77,9 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
         this.genToast.open('Succesfully Logged In', 'Dismiss', {
           duration: 2000,
-          panelClass: 'success-toast'
+          panelClass: 'success-toast',
         });
-        this.router.navigate(['/todos']);
+        this.router.navigate(['/home']);
         return;
       }
     });

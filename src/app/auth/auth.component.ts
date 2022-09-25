@@ -10,12 +10,5 @@ import { AuthService } from '../service/auth.service';
 export class AuthComponent implements OnInit {
   constructor(public authService: AuthService, public router: Router) {}
 
-  ngOnInit(): void {
-    this.authService.getIsLoggedIn().subscribe((value) => {
-      if (value) {
-        console.log(value, 'from auth comp');
-        this.router.navigate(['/todos']);
-      }
-    });
-  }
+  ngOnInit(): void {}
 }
