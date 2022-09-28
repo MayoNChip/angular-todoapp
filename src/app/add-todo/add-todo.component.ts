@@ -49,6 +49,7 @@ export class AddTodoComponent implements OnInit {
       content: value.content,
       completed: false,
       new: true,
+      createdAt: new Date().toISOString(),
     };
     const addTodoResponse = this.todosService.addNewTodo(newTodo);
     if (addTodoResponse) {

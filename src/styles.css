@@ -17,20 +17,20 @@ body {
 }
 
 .mat-dialog-container {
+  padding: 0px !important;
+
   background: rgb(229 231 235);
 }
 
 .mat-dialog-title {
-  @apply text-3xl;
+  @apply text-2xl md:text-3xl;
+  margin: 0 !important;
+  font: "Roboto", "Helvetica Neue", sans-serif !important;
 }
 
 .mat-form-field-wrapper {
   padding-bottom: 0;
 }
-
-/* .mat-menu-item {
-  @apply text-orange-500;
-} */
 
 .success-toast {
   @apply text-white bg-green-600;
