@@ -1,10 +1,10 @@
-<div class="flex flex-col w-full h-full">
+<div class="flex flex-col w-full">
   <div
-    class="flex w-full bg-gray-700 h-[200px] md:h-[280px] shadow shadow-black"
+    class="flex w-full bg-gray-700 h-[200px] md:h-[240px] shadow shadow-black"
   >
     <div
       style="background-image: url('../assets/welcomeart.png')"
-      class="flex flex-col md:mr-28 items-center w-full bg-opacity-0 md:bg-[length:500px] bg-[length:250px] bg-no-repeat bg-right-bottom"
+      class="flex flex-col md:mr-28 items-center w-full h-full bg-opacity-0 md:bg-[length:500px] bg-[length:200px] bg-no-repeat bg-right-bottom"
     >
       <div class="flex justify-between w-full h-full md:flex-row">
         <div
@@ -35,7 +35,7 @@
             during your day-to-day
           </h1>
           <ng-template #loggedInText>
-            <h1 class="w-1/2 text-xl text-gray-300 md:mt-4">
+            <h1 class="w-full text-xl text-gray-300 md:mt-4">
               Happy to see you again, jump in to your to-do's - We believe in
               you!
             </h1>
@@ -46,145 +46,100 @@
   </div>
   <div
     *ngIf="isLoggedIn; else notLoggedInHomeContent"
-    class="w-full md:h-[250px] h-full items-center md:items-baseline flex md:flex-row flex-col justify-evenly mt-10"
+    class="w-full md:h-[450px] h-full items-center md:items-center flex md:flex-row flex-col justify-evenly"
   >
     <div
-      class="flex flex-col w-2/3 m-2 bg-gray-300 rounded shadow-md h-60 md:w-60 md:h-80 shadow-black md:items-center"
+      *ngFor="let widget of widgets"
+      class="flex flex-col w-2/3 gap-2 m-2 bg-gray-300 rounded shadow-md h-60 md:w-60 md:h-80 shadow-black md:items-center"
     >
-      <div class="flex items-center justify-center w-full p-4 h-1/2">
-        <h1 class="text-4xl font-semibold text-center">Total To-do's</h1>
+      <div class="flex items-center justify-center w-full h-1/3">
+        <h1 class="text-2xl font-semibold text-center">{{ widget.title }}</h1>
       </div>
       <div
-        class="flex justify-center w-full p-2 text-6xl font-semibold text-blue-600 h-fit"
+        class="flex justify-center w-full p-2 text-6xl font-semibold {{
+          widget.type !== 'total'
+            ? widget.type === 'waiting'
+              ? 'text-orange-600'
+              : 'text-green-500'
+            : 'text-blue-600'
+        }} text-blue-600 h-fit"
       >
-        {{ userTodos.length }}
+        {{ widget.dataSource }}
       </div>
       <div
-        class="flex flex-col items-center justify-center w-full text-blue-300 bg-blue-600 h-fit md:mt-4 rounded-b-md"
+        class="flex flex-col items-center justify-center w-full  {{
+          widget.type !== 'total'
+            ? widget.type === 'waiting'
+              ? 'text-orange-100'
+              : 'text-green-100'
+            : 'text-blue-100 '
+        }} {{
+          widget.type !== 'total'
+            ? widget.type === 'waiting'
+              ? 'bg-orange-600'
+              : 'bg-green-600'
+            : 'bg-blue-600'
+        }}  h-fit"
       >
-        <div class="flex items-center justify-center w-full h-full p-2">
+        <div class="flex items-center justify-center w-full h-full p-4">
           <h1
-            class="p-1 font-medium text-center align-middle text-md md:text-xl"
+            class="w-full font-medium text-center align-middle text-md md:text-md"
           >
-            “Be the change that you wish to see in the world.” <br />
-            Mahatma Gandhi
+            {{ widget.banner }}
           </h1>
         </div>
-
-        <!-- <ng-template #keepItUp>
-          <h1 class="w-full h-full text-xl font-medium text-center md:text-2xl">
-            Keep it up!!
-          </h1>
-        </ng-template> -->
       </div>
-    </div>
-    <!-- <div
-      class="flex flex-col w-2/3 m-2 bg-gray-300 rounded shadow-md md:w-60 md:h-80 shadow-black md:items-center"
-    >
-      <div class="flex items-center w-full p-4 md:p-2 md:justify-center h-1/2">
-        <h1 class="text-2xl font-medium text-center">
-          Number of waiting To-do's
-        </h1>
-      </div>
-      <div
-        class="flex justify-center w-full p-2 text-6xl font-semibold text-orange-600 h-fit"
-      >
-        {{ userWaitingTodos.length }}
-      </div>
-      <div
-        class="flex flex-col items-center justify-center w-full text-orange-300 bg-orange-600 h-fit md:mt-4 rounded-b-md"
-      >
-        <div class="flex items-center justify-center w-full h-full p-2">
-          <h1
-            class="p-4 font-medium text-center align-middle text-md md:text-2xl"
-            *ngIf="userWaitingTodos.length <= 5; else chopchop"
-          >
-            Good job, Almost done!
-          </h1>
-        </div>
-        <ng-template #chopchop>
-          <div class="flex items-center justify-center w-full h-full md:w-5/6">
+      <ng-template #waiting>
+        <div
+          *ngIf="widget.type === 'waiting'; else completed"
+          class="flex items-center justify-center w-full text-orange-300 bg-orange-600"
+        >
+          <div class="flex items-center justify-center w-full h-full p-4">
             <h1
-              class="p-4 text-xl font-medium text-center md:p-1 md:text-xl h-fit"
+              class="w-full font-medium text-center align-middle text-md md:text-md"
             >
-              Chop chop, alot of work to be done!
+              {{ widget.banner }}
             </h1>
-           <h1>Hellasfasfasda sdfasfasd sdsdfasdfasdfadfasdfo</h1> 
+          </div>
+        </div>
+        <ng-template #completed>
+          <div
+            class="flex items-center justify-center w-full text-green-300 bg-green-600"
+          >
+            <div class="flex items-center justify-center w-full h-full p-4">
+              <h1
+                class="w-full font-medium text-center align-middle text-md md:text-md"
+              >
+                {{ widget.banner }}
+              </h1>
+            </div>
           </div>
         </ng-template>
-
-        <!-- <ng-template #keepItUp>
-          <h1 class="w-full h-full text-xl font-medium text-center md:text-2xl">
-            Keep it up!!
-          </h1>
-        </ng-template> 
-      </div>
-    </div> -->
-
-    <div
-      class="flex flex-col w-2/3 m-2 bg-gray-300 rounded shadow-md h-60 md:w-60 md:h-80 shadow-black md:items-center"
-    >
-      <div
-        class="flex items-center w-full p-4 md:w-2/3 md:p-2 md:justify-center h-1/2"
-      >
-        <h1 class="text-2xl font-medium text-center">
-          Number of waiting To-do's
-        </h1>
-      </div>
-      <div
-        class="flex justify-center w-full p-2 text-6xl font-semibold text-orange-600"
-      >
-        {{ userWaitingTodos.length }}
-      </div>
-      <div
-        class="flex items-center justify-center w-full text-orange-300 bg-orange-600"
-      >
-        <h1
-          class="p-4 text-xl font-medium text-center md:text-2xl h-max"
-          *ngIf="userWaitingTodos.length <= 5; else keepItUp"
-        >
-          Good job!!
-        </h1>
-        <ng-template #keepItUp>
-          <h1 class="p-4 text-xl font-medium text-center md:text-2xl h-max">
-            Keep it up!!
-          </h1>
-        </ng-template>
-      </div>
+      </ng-template>
     </div>
-
-    <div
-      class="flex flex-col w-2/3 m-2 bg-gray-300 rounded shadow-md h-60 md:w-60 md:h-80 shadow-black md:items-center"
-    >
-      <div
-        class="flex items-center w-full p-4 md:w-2/3 md:p-2 md:justify-center h-1/2"
-      >
-        <h1 class="text-2xl font-medium text-center">
-          Number of completed To-do's
-        </h1>
-      </div>
-      <div
-        class="flex justify-center w-full p-2 text-6xl font-semibold text-green-600"
-      >
-        {{ userCompletedTodos.length }}
-      </div>
-      <div
-        class="flex items-center justify-center w-full text-green-300 bg-green-600"
-      >
-        <h1
-          class="p-4 text-xl font-medium text-center md:text-2xl h-fit"
-          *ngIf="userCompletedTodos.length > 5; else keepItUp"
+  </div>
+  <div class="relative flex flex-col w-full py-4">
+    <div class="w-full">
+      <h1 class="absolute top-0 text-3xl font-medium text-amber-600 px-52">
+        Tell us more about you!
+      </h1>
+    </div>
+    <div class="flex flex-col w-full py-5 bg-gray-600 shadow-md">
+      <h1 class="px-56 text-2xl text-gray-200 font-extralight">
+        What are the nature of your tasks using this app?
+      </h1>
+      <div class="flex flex-wrap self-center w-2/3 gap-5 my-5">
+        <button
+          *ngFor="let interest of interests"
+          class="flex h-[50px] bg-gray-300 rounded-full items-center justify-center text-center p-4 hover:bg-gray-400 active:bg-orange-500 active:text-white shadow-md"
         >
-          Wow! Impressive!
-        </h1>
-        <ng-template #keepItUp>
-          <h1 class="text-2xl font-medium">Keep it up!!</h1>
-        </ng-template>
+          {{ interest }}
+        </button>
       </div>
     </div>
   </div>
   <ng-template #notLoggedInHomeContent>
-    <div class="w-full h-[250px] flex justify-evenly mt-10">
+    <div class="flex w-full h-[250px] mt-10 justify-evenly">
       <h1 class="text-3xl text-gray-300">
         To continute, please
         <a

@@ -16,6 +16,13 @@ export class HomeComponent implements OnInit {
   userTodos: Todo[];
   userCompletedTodos: Todo[];
   userWaitingTodos: Todo[];
+  widgets: {
+    title: string;
+    dataSource: number;
+    banner: string;
+    type: string;
+  }[];
+  interests: string[];
 
   constructor(
     public authService: AuthService,
@@ -36,13 +43,49 @@ export class HomeComponent implements OnInit {
               this.userCompletedTodos = todos.filter(
                 (todo) => todo.completed === true
               );
+
               this.userWaitingTodos = todos.filter(
                 (todo) => todo.completed === false
               );
+              this.widgets = [
+                {
+                  title: `Total To-do's`,
+                  dataSource: this.userTodos.length,
+                  banner: 'Progress is key for success!',
+                  type: 'total',
+                },
+                {
+                  title: `Waiting To-do's`,
+                  dataSource: this.userWaitingTodos.length,
+                  banner: 'Keep it up!!',
+                  type: 'waiting',
+                },
+                {
+                  title: `Completed To-do's`,
+                  dataSource: this.userCompletedTodos.length,
+                  banner: 'Wow! Impressive!',
+                  type: 'completed',
+                },
+              ];
+              this.interests = [
+                'workout',
+                'studying',
+                'Errands',
+                'Personal development',
+                'Vacation planning',
+                'Financial planning',
+                'Cooking',
+                'Project management',
+                'Career development',
+                'Job search',
+                'Coding',
+              ];
             }
           });
       }
     });
+
     this.userDetails = this.authService.getUserDetails();
+    console.log(this.userTodos);
   }
 }

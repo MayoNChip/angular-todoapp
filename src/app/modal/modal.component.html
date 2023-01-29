@@ -17,7 +17,7 @@
           class="flex self-center justify-between w-full p-2 text-sm text-gray-700 h-fit"
         >
           <h1>Created at:</h1>
-          <h1 *ngIf="data?.createdAt">{{ data?.createdAt | date }}</h1>
+          <h1 *ngIf="data?.createdAt">{{ data.createdAt | date }}</h1>
         </div>
         <div
           class="flex items-center self-center justify-between w-full h-10 p-2 text-sm text-gray-700"
@@ -57,7 +57,7 @@
       class="flex flex-col w-full p-4 h-[220px] mt-2 mb-8"
     >
       <!-- <h1 class="my-2 text-xl text-gray-500">To-do Body</h1> -->
-      <div class="w-full h-full p-4 rounded shadow-inner bg-gray-500/20">
+      <div class="w-full h-full p-4 rounded shadow-inner bg-gray-500/10">
         <p class="text-gray-800 text-md">{{ data.content }}</p>
       </div>
     </div>

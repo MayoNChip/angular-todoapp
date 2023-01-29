@@ -11,7 +11,7 @@
   <div class="flex h-full">
     <button
       *ngFor="let item of navbarItems"
-      class="h-full px-3 py-1 text-black cursor-pointer md:px-4 md:py-2 w-max hover:bg-orange-600 hover:text-white"
+      class="h-full px-3 py-1 font-medium text-black cursor-pointer md:px-4 md:py-2 w-max hover:bg-orange-600 hover:text-white"
       routerLink="{{ item.path }}"
     >
       {{ item.title }}

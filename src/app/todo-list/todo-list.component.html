@@ -68,7 +68,7 @@
     class="grid w-full h-full grid-cols-1 grid-rows-2 mt-4 md:grid-rows-4 md:grid-cols-4 gap-y-10 gap-x-10"
   >
     <div
-      *ngFor="let todo of todos | slice: 0:limitBy; let i = index"
+      *ngFor="let todo of todos | slice : 0 : limitBy; let i = index"
       (click)="openTodoDialog(todo)"
       class="relative flex flex-col w-full text-gray-800 transition-all bg-gray-200 rounded-md shadow-md cursor-pointer group h-[200px] md:h-[240px] hover:scale-105 hover:border-b-4 hover:border-orange-400"
     >
@@ -93,14 +93,14 @@
         </div>
         <div
           *ngIf="todo.completed; else notCompleted"
-          class="flex flex-col items-center self-center justify-center p-2 text-white scale-75 bg-green-600 border-2 rounded shadow-inner w-fit border-green-700/50 bottom-5"
+          class="absolute flex flex-col items-center self-center p-2 text-white scale-75 bg-green-600 border-2 rounded shadow-inner w-fit border-green-700/50 bottom-10"
         >
           <h1 class="text-base">To-do Completed!</h1>
           <h3 class="text-sm text-green-300">Way To Go!</h3>
         </div>
         <ng-template #notCompleted>
           <div
-            class="flex flex-col items-center self-center p-2 text-white scale-75 bg-orange-500 border-2 rounded-md sm:w-16 md:w-fit border-orange-600/50 h-fit bottom-5"
+            class="absolute flex flex-col items-center self-center p-2 text-white scale-75 bg-orange-500 border-2 rounded-md bottom-10 sm:w-16 md:w-fit border-orange-600/50 h-fit"
           >
             <h1 class="text-xl">To-do waiting...</h1>
             <h3 class="text-sm text-red-300">I believe in you!</h3>
